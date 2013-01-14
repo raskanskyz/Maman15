@@ -23,17 +23,21 @@ public class StringList {
 	public StringList(String s) {
 
 	}// CTOR1
-		// -----------MY CONSTRUCTORS-----------------
+
+	// -----------MY CONSTRUCTORS-----------------
 
 	// -------------METHODS------------------------------
-	public char charAt(int i) {
-		for (int ptr = 0; ptr < i; ptr++) {
-			_head = _head.getNext();
-		}
-		return _head.getData();
+	/* OKAY */public char charAt(int i) {
+		StringList temp = new StringList(_head);
+		int counter = 0;
+		while (temp._head.getNext() != null && counter < i) {
+			temp._head = temp._head.getNext();
+			counter++;
+		}// while
+		return temp._head.getData();
 	}// charAt
 
-	public StringList concat(StringList str) {
+	/* REVIEW */public StringList concat(StringList str) {
 		StringList concatedList = new StringList(_head);
 		while (concatedList._head.getNext() != null) {
 			concatedList._head = concatedList._head.getNext();
@@ -42,38 +46,35 @@ public class StringList {
 		return concatedList;
 	}// concat
 
-	public int indexOf(int ch) {
-		int indexPoint = 0;
-		while (_head.getNext() != null) {
-			if (_head.getData() == charAt(ch)) {
-				return indexPoint;
-			} else {
-				_head = _head.getNext();
-				indexPoint++;
-			}
-		}
-		return -1;
-	}// indexOf
+	/* OKAY */public int indexOf(int ch) {
+		StringList temp = new StringList(_head);
+		int valueCounter = 0;
+		while (temp._head.getNext() != null) {
+			if (temp._head.getData() == ch)
+				return valueCounter;
+			else {
+				valueCounter += temp._head.getValue();
+				temp._head = temp._head.getNext();
 
-	public int indexOf(int ch, int fromIndex) {
-		int pointer = 0;
-		while (_head.getNext() != null && pointer < fromIndex) {
-			_head = _head.getNext();
-			pointer++;
-		}
-		if (_head.getNext() == null)
+			}// else
+
+		}// while
+		if (temp._head.getData() == ch)
+			return valueCounter;
+		else
 			return -1;
 
-		int indexPoint = pointer;
-		while (_head.getNext() != null) {
-			if (_head.getData() == charAt(ch)) {
-				return indexPoint;
-			} else {
-				_head = _head.getNext();
-				indexPoint++;
-			}
-		}
-		return -1;
+	}// indexOf
+
+	/* OKAY */public int indexOf(int ch, int fromIndex) {
+		int valueCounter = 0;
+		StringList temp = new StringList(_head);
+		while (valueCounter < fromIndex) {
+			valueCounter += temp._head.getValue();
+			temp._head = temp._head.getNext();
+		}// while
+		return valueCounter + temp.indexOf(ch);
+
 	}// indexOf
 
 	public boolean equals(StringList str) {
@@ -124,24 +125,40 @@ public class StringList {
 
 	}// compareTo
 
-	public StringList subString (int i ) {
-		
+	public StringList subString(int i) {
+
 		StringList temp = new StringList(_head);
 		int pointer = 0;
-		
+
 		while (temp._head.getNext() != null && pointer < i) {
 			temp._head = temp._head.getNext();
 			pointer++;
-		}//while
-		
+		}// while
+
 		return temp;
 	}
-	
-	public StringList subString (int i, int j ){
-		
-		
-	}//sub (i,j)
-	
+
+	public StringList subString(int i, int j) {
+		int pointer = 0;
+		StringList temp2 = new StringList();
+		StringList temp = subString(i);
+		CharNode last = temp2._head;
+		while (pointer < j - i) {
+			if (temp2._head == null) {
+				temp2._head = temp._head;
+				pointer++;
+			} else {
+				last.setNext(new CharNode(temp._head.getNext().getData(),
+						temp._head.getNext().getValue(), temp._head.getNext()
+								.getNext()));
+				last = last.getNext();
+				temp._head = temp._head.getNext();
+				pointer++;
+			}// else
+		}// while
+		return temp2;
+	}// subString
+
 	// -------------METHODS------------------------------
 
 	// -----------------PRIVATE METHODS-------------------
@@ -152,8 +169,20 @@ public class StringList {
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
-		char a = 'a';
-		char A = 'A';
-		System.out.println();
+		CharNode node7 = new CharNode('b', 2, null);
+		CharNode node6 = new CharNode('a', 1, node7);
+		CharNode node5 = new CharNode('d', 1, node6);
+		CharNode node4 = new CharNode('c', 2, node5);
+		CharNode node3 = new CharNode('b', 2, node4);
+		CharNode node2 = new CharNode('A', 1, node3);
+		CharNode node1 = new CharNode('b', 1, node2);
+		CharNode node = new CharNode('A', 2, node1);
+
+		StringList sl = new StringList(node);
+
+		System.out.println(sl.charAt(2));
+		System.out.println(sl.indexOf('a'));
+		System.out.println(sl.indexOf('b', 3));
+
 	}
 }
