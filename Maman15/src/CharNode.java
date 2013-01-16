@@ -4,6 +4,7 @@ public class CharNode {
 	private CharNode _next;
 
 	public CharNode(char c, int val, CharNode n) {
+		System.out.println("Data: " + c + " value: " + val);
 		_data = c;
 		_value = val;
 		_next = n;

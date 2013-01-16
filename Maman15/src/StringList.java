@@ -61,10 +61,11 @@ public class StringList {
 	/* OKAY */public char charAt(int i) {
 		CharNode newNode = copyHead();
 		int counter = 0;
-		while (newNode.getNext() != null && counter < i) {
+		while (newNode.getNext() != null && counter <= i) {
+			if (counter + newNode.getNext().getValue() > i)
+				return newNode.getData();
+			counter += newNode.getValue();
 			newNode = newNode.getNext();
-			counter++;
-
 		}// while
 		return newNode.getData();
 	}// charAt
@@ -78,7 +79,7 @@ public class StringList {
 		return concatedList;
 	}// concat
 
-	/* OKAY */public int indexOf(int ch) {
+	/* REVIEW */public int indexOf(int ch) {
 		CharNode newNode = copyHead();
 		int valueCounter = 0;
 		while (newNode.getNext() != null) {
@@ -98,6 +99,18 @@ public class StringList {
 
 	public int indexOf(int ch, int fromIndex) {
 		CharNode newNode = copyHead();
+		int indexPoint = 0;
+		while (indexPoint < fromIndex && newNode != null) {
+			if (indexPoint + newNode.getValue() <= fromIndex) {
+				indexPoint += newNode.getValue();
+				newNode = newNode.getNext();
+			}// if
+			else
+				indexPoint++;
+		}// while
+		if (newNode == null)
+			return -1;
+		// first loop finished
 
 	}// indexOf
 
@@ -199,13 +212,7 @@ public class StringList {
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
-		StringList list = new StringList("Hello");
-
-		System.out.println(list.charAt(0));
-		System.out.println(list.charAt(1));
-		System.out.println(list.charAt(2));
-		System.out.println(list.charAt(3));
-		System.out.println(list.charAt(4));
-
+		StringList list = new StringList("aaabbbaaa");
+		System.out.println(list.indexOf('a', 4));
 	}
 }
