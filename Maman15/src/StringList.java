@@ -71,6 +71,8 @@ public class StringList {
 	}// charAt
 
 	/* OKAY */public StringList concat(StringList str) {
+		if (_head == null)
+			return str;
 		StringList tempList = new StringList(_head);
 		tempList.getLastNode().setNext(str.copyHead());
 		return tempList;
@@ -124,71 +126,45 @@ public class StringList {
 
 	}// equals
 
-	public int compareTo(StringList str) {
-		if (equals(str))
+	/* OKAY */public int compareTo(StringList str) {
+		CharNode origin = copyHead();
+		CharNode target = copyHead(str);
+
+		while (origin != null && target != null && compareNodes(origin, target)) {
+			origin = origin.getNext();
+			target = target.getNext();
+		}// while !=null and equal
+
+		if (origin != null && target != null)
+			if (origin.getData() > target.getData())
+				return 1;
+			else if (origin.getData() < target.getData())
+				return -1;
+		if (origin == null && target == null)
 			return 0;
-		while (nodeEquals(str)
-				&& (_head.getNext() != null && str._head.getNext() != null)) {
-			_head = _head.getNext();
-			str._head = str._head.getNext();
-		}// while
-		if (_head.getNext() == null)
+		if (origin == null && target != null)
 			return -1;
-		if (str._head.getNext() == null)
-			return 1;
-
-		if (_head.getData() != str._head.getData()) {
-			if (_head.getData() > str._head.getData())
-				return 1;
-			else
-				return -1;
-
-		}// if !=data
-
-		if (_head.getValue() > str._head.getValue())
-			if (str._head.getNext().getData() > _head.getData())
-				return -1;
-			else
-				return 1;
-		else if (_head.getNext().getData() > str._head.getData())
-			return 1;
-		else
-			return -1;
+		return 1;
 
 	}// compareTo
 
-	public StringList subString(int i) {
-
-		StringList temp = new StringList(_head);
-		int pointer = 0;
-
-		while (temp._head.getNext() != null && pointer < i) {
-			temp._head = temp._head.getNext();
-			pointer++;
+	/* OKAY */public StringList subString(int i) {
+		int count = 0;
+		StringList subList = new StringList(this);
+		while (subList._head != null && count + subList._head.getValue() <= i) {
+			count += subList._head.getValue();
+			subList._head = subList._head.getNext();
 		}// while
-
-		return temp;
-	}
+		if (subList._head == null)
+			return subList;
+		for (int j = 1; count + j <= i; j++)
+			subList._head.setValue(j);
+		return subList;
+	}// subString
 
 	public StringList subString(int i, int j) {
-		int pointer = 0;
-		StringList temp2 = new StringList();
-		StringList temp = subString(i);
-		CharNode last = temp2._head;
-		while (pointer < j - i) {
-			if (temp2._head == null) {
-				temp2._head = temp._head;
-				pointer++;
-			} else {
-				last.setNext(new CharNode(temp._head.getNext().getData(),
-						temp._head.getNext().getValue(), temp._head.getNext()
-								.getNext()));
-				last = last.getNext();
-				temp._head = temp._head.getNext();
-				pointer++;
-			}// else
-		}// while
-		return temp2;
+		return null;
+
 	}// subString
 
 	/* OKAY */public int length() {
@@ -221,11 +197,6 @@ public class StringList {
 	// -------------METHODS------------------------------
 
 	// -----------------PRIVATE METHODS-------------------
-	private boolean nodeEquals(StringList node) {
-		return (_head.getData() == node._head.getData() && _head.getValue() == node._head
-				.getValue());
-	}// nodeEquals
-
 	private CharNode copyHead() {
 		if (_head == null)
 			return null;
@@ -234,13 +205,28 @@ public class StringList {
 
 	private CharNode getLastNode() {
 		CharNode temp;
+		if (_head == null)
+			return null;
 		for (temp = copyHead(); temp.getNext() != null; temp = temp.getNext()) {
 		}// for
 		return temp;
 	}// getLastNode
 
-	@SuppressWarnings("unused")
+	private void clipLastNode() {
+		if (_head == null)
+			return;
+		CharNode newNode = copyHead();
+		CharNode prev = null;
+		while (newNode.getNext() != null) {
+			newNode = newNode.getNext();
+			prev = _head.getNext();
+		}
+		prev.setNext(null);
+	}
+
 	private CharNode copyHead(StringList other) {
+		if (other._head == null)
+			return null;
 		return new CharNode(other._head.getData(), other._head.getValue(),
 				other._head.getNext());
 	}
@@ -258,14 +244,19 @@ public class StringList {
 	}// equals
 
 	private boolean compareNodes(CharNode origin, CharNode target) {
+		if (origin == null && target == null)
+			return true;
+		if ((origin == null && target != null)
+				|| (target == null && origin != null))
+			return false;
 		return (origin.getData() == target.getData() && origin.getValue() == target
 				.getValue());
 	}// compareNodes
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
-		StringList hello = new StringList("Hello");
-		StringList world = new StringList(" World");
+		StringList hello = new StringList("Happy");
+		StringList world = new StringList("def");
 		System.out.println(hello.toString());
 		System.out.println(world.toString());
 		System.out.println(hello.concat(world).toString());
@@ -274,5 +265,8 @@ public class StringList {
 		System.out.println("*******************");
 		System.out.println(hello.equals(world));
 		System.out.println(world.length());
+		System.out.println(hello.compareTo(world));
+		System.out.println(hello.subString(2) + " is a subString of "
+				+ hello.toString());
 	}
 }
