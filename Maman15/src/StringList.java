@@ -70,13 +70,11 @@ public class StringList {
 		return newNode.getData();
 	}// charAt
 
-	/* REVIEW */public StringList concat(StringList str) {
-		StringList concatedList = new StringList(_head);
-		while (concatedList._head.getNext() != null) {
-			concatedList._head = concatedList._head.getNext();
-		}
-		concatedList._head.setNext(str._head);
-		return concatedList;
+	/* OKAY */public StringList concat(StringList str) {
+		StringList tempList = new StringList(_head);
+		System.out.println("tempList = " + tempList.toString());
+		tempList.getLastNode().setNext(str.copyHead());
+		return tempList;
 	}// concat
 
 	/* REVIEW */public int indexOf(int ch) {
@@ -97,7 +95,7 @@ public class StringList {
 
 	}// indexOf
 
-	public int indexOf(int ch, int fromIndex) {
+	/* OKAY */public int indexOf(int ch, int fromIndex) {
 		CharNode newNode = copyHead();
 		int indexOf = 0;
 		if (fromIndex < 0)
@@ -121,15 +119,9 @@ public class StringList {
 	}// indexOf
 
 	public boolean equals(StringList str) {
-		StringList temp = new StringList(_head);
+		StringList thisList = new StringList(_head);
+		StringList otherList = new StringList(copyNode(str));
 
-		if ((temp._head.getNext() == null && str._head.getNext() != null)
-				|| (temp._head.getNext() != null && str._head.getNext() == null)) {
-			return false;
-		}// if
-		if (temp._head.getNext() == null && str._head.getNext() == null)
-			return (temp.nodeEquals(str));
-		return false;
 	}// equals
 
 	public int compareTo(StringList str) {
@@ -199,6 +191,23 @@ public class StringList {
 		return temp2;
 	}// subString
 
+	public String toString() {
+		String temp = "";
+		for (CharNode tempNode = _head; tempNode != null; tempNode = tempNode
+				.getNext()) {
+			int counter = 0;
+			if (tempNode.getValue() == 1)
+				temp += tempNode.getData();
+			else {
+				while (counter < tempNode.getValue()) {
+					temp += tempNode.getData();
+					counter++;
+				}// while
+			}// else
+		}// forLoop
+		return temp;
+	}// toString
+
 	// -------------METHODS------------------------------
 
 	// -----------------PRIVATE METHODS-------------------
@@ -208,17 +217,31 @@ public class StringList {
 	}// nodeEquals
 
 	private CharNode copyHead() {
-		return new CharNode(_head.getData(), _head.getValue(), _head.getNext()/*
-																			 * <--
-																			 * New
-																			 * charNode
-																			 * ?
-																			 */);
+		return new CharNode(_head.getData(), _head.getValue(), _head.getNext());
+	}
+
+	private CharNode getLastNode() {
+		CharNode temp;
+		for (temp = copyHead(); temp.getNext() != null; temp = temp.getNext()) {
+		}// for
+		return temp;
+	}// getLastNode
+
+	private CharNode copyNode(StringList other) {
+		return new CharNode(other._head.getData(), other._head.getValue(),
+				other._head.getNext());
 	}
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
 		StringList list = new StringList("aaabbbaaad");
 		System.out.println(list.indexOf('a', -6));
+
+		StringList hello = new StringList("Hello");
+		StringList world = new StringList(" World");
+		System.out.println(hello.toString());
+		System.out.println(hello.concat(world).toString());
+		System.out.println("hello is still: " + hello.toString());
+		System.out.println("World is still: " + world.toString());
 	}
 }
