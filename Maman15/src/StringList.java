@@ -72,7 +72,6 @@ public class StringList {
 
 	/* OKAY */public StringList concat(StringList str) {
 		StringList tempList = new StringList(_head);
-		System.out.println("tempList = " + tempList.toString());
 		tempList.getLastNode().setNext(str.copyHead());
 		return tempList;
 	}// concat
@@ -118,7 +117,7 @@ public class StringList {
 
 	}// indexOf
 
-	public boolean equals(StringList str) {
+	/* OKAY */public boolean equals(StringList str) {
 		CharNode origin = copyHead();
 		CharNode target = str.copyHead();
 		return equals(origin, target);
@@ -192,7 +191,17 @@ public class StringList {
 		return temp2;
 	}// subString
 
-	public String toString() {
+	/* OKAY */public int length() {
+		int counter = 0;
+		CharNode newNode = copyHead();
+		while (newNode != null) {
+			counter += newNode.getValue();
+			newNode = newNode.getNext();
+		}// while
+		return counter;
+	}// length
+
+	/* OKAY */public String toString() {
 		String temp = "";
 		for (CharNode tempNode = _head; tempNode != null; tempNode = tempNode
 				.getNext()) {
@@ -218,6 +227,8 @@ public class StringList {
 	}// nodeEquals
 
 	private CharNode copyHead() {
+		if (_head == null)
+			return null;
 		return new CharNode(_head.getData(), _head.getValue(), _head.getNext());
 	}
 
@@ -253,16 +264,15 @@ public class StringList {
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
-		StringList list = new StringList("aaabbbaaad");
-		System.out.println(list.indexOf('a', -6));
-
 		StringList hello = new StringList("Hello");
-		StringList world = new StringList("Hello");
+		StringList world = new StringList(" World");
 		System.out.println(hello.toString());
-		// System.out.println(hello.concat(world).toString());
+		System.out.println(world.toString());
+		System.out.println(hello.concat(world).toString());
 		System.out.println("hello is still: " + hello.toString());
 		System.out.println("World is still: " + world.toString());
 		System.out.println("*******************");
 		System.out.println(hello.equals(world));
+		System.out.println(world.length());
 	}
 }
