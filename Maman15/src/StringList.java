@@ -99,18 +99,24 @@ public class StringList {
 
 	public int indexOf(int ch, int fromIndex) {
 		CharNode newNode = copyHead();
-		int indexPoint = 0;
-		while (indexPoint < fromIndex && newNode != null) {
-			if (indexPoint + newNode.getValue() <= fromIndex) {
-				indexPoint += newNode.getValue();
-				newNode = newNode.getNext();
-			}// if
-			else
-				indexPoint++;
+		int indexOf = 0;
+		if (fromIndex < 0)
+			return -1;
+		if (fromIndex < newNode.getValue() && newNode.getData() == ch)
+			return fromIndex;
+		while (newNode != null && indexOf + newNode.getValue() < fromIndex) {
+			indexOf += newNode.getValue();
+			newNode = newNode.getNext();
 		}// while
 		if (newNode == null)
 			return -1;
-		// first loop finished
+		while (newNode != null && newNode.getData() != ch) {
+			indexOf += newNode.getValue();
+			newNode = newNode.getNext();
+		}// while
+		if (newNode == null)
+			return -1;
+		return indexOf;
 
 	}// indexOf
 
@@ -212,7 +218,7 @@ public class StringList {
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
-		StringList list = new StringList("aaabbbaaa");
-		System.out.println(list.indexOf('a', 4));
+		StringList list = new StringList("aaabbbaaad");
+		System.out.println(list.indexOf('a', -6));
 	}
 }
