@@ -77,7 +77,7 @@ public class StringList {
 		return tempList;
 	}// concat
 
-	/* REVIEW */public int indexOf(int ch) {
+	/* OKAY */public int indexOf(int ch) {
 		CharNode newNode = copyHead();
 		int valueCounter = 0;
 		while (newNode.getNext() != null) {
@@ -119,8 +119,9 @@ public class StringList {
 	}// indexOf
 
 	public boolean equals(StringList str) {
-		StringList thisList = new StringList(_head);
-		StringList otherList = new StringList(copyNode(str));
+		CharNode origin = copyHead();
+		CharNode target = str.copyHead();
+		return equals(origin, target);
 
 	}// equals
 
@@ -227,10 +228,28 @@ public class StringList {
 		return temp;
 	}// getLastNode
 
-	private CharNode copyNode(StringList other) {
+	@SuppressWarnings("unused")
+	private CharNode copyHead(StringList other) {
 		return new CharNode(other._head.getData(), other._head.getValue(),
 				other._head.getNext());
 	}
+
+	private boolean equals(CharNode origin, CharNode target) {
+		if (origin == null && target == null)
+			return true;
+		if ((origin == null && target != null)
+				|| (target == null && origin != null))
+			return false;
+		else {
+			return (equals(origin.getNext(), target.getNext()) && compareNodes(
+					origin, target));
+		}
+	}// equals
+
+	private boolean compareNodes(CharNode origin, CharNode target) {
+		return (origin.getData() == target.getData() && origin.getValue() == target
+				.getValue());
+	}// compareNodes
 
 	// -----------------PRIVATE METHODS-------------------
 	public static void main(String[] args) {
@@ -238,10 +257,12 @@ public class StringList {
 		System.out.println(list.indexOf('a', -6));
 
 		StringList hello = new StringList("Hello");
-		StringList world = new StringList(" World");
+		StringList world = new StringList("Hello");
 		System.out.println(hello.toString());
-		System.out.println(hello.concat(world).toString());
+		// System.out.println(hello.concat(world).toString());
 		System.out.println("hello is still: " + hello.toString());
 		System.out.println("World is still: " + world.toString());
+		System.out.println("*******************");
+		System.out.println(hello.equals(world));
 	}
 }
