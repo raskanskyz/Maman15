@@ -11,6 +11,7 @@ public class StringList {
 
 	/**
 	 * Default constructor of the StringList Class.
+	 * 
 	 */
 	public StringList() {
 		_head = null;
@@ -20,7 +21,8 @@ public class StringList {
 	 * Initializes a StringList object from 'node'.
 	 * 
 	 * @param node
-	 *            The node from which to initialize this StringList object. @
+	 *            The node from which to initialize this StringList object.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public StringList(CharNode node) {
 		if (node == null)
@@ -43,6 +45,11 @@ public class StringList {
 	 * 
 	 * @param s
 	 *            The String from which to initialize this StringList object.
+	 * @Complexity Time:O(n) , Space: O(1)
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 	public StringList(String s) {
 		CharNode temp = _head;
@@ -69,7 +76,7 @@ public class StringList {
 	 * @param other
 	 *            The StringList object from which to initialize this StringList
 	 *            object.
-	 * 
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public StringList(StringList other) {
 		if (other._head == null)
@@ -96,6 +103,7 @@ public class StringList {
 	 * @param i
 	 *            The index from which to retrieve the char
 	 * @return the char located at 'i'.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public char charAt(int i) {
 		CharNode newNode = copyHead();
@@ -116,6 +124,7 @@ public class StringList {
 	 *            The String that is concatenated to the end of this String.
 	 * @return The String that represents the concatenation of this StringList's
 	 *         characters followed by the string argument's characters.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public StringList concat(StringList str) {
 		if (_head == null)
@@ -133,6 +142,7 @@ public class StringList {
 	 *            A character.
 	 * @return The index of the first occurrence of the character in the
 	 *         character sequence represented by this StringList.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public int indexOf(int ch) {
 		CharNode newNode = copyHead();
@@ -164,28 +174,30 @@ public class StringList {
 	 *         character sequence represented by this object that is greater
 	 *         than or equal to fromIndex, or -1 if the character does not
 	 *         occur.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public int indexOf(int ch, int fromIndex) {
 		CharNode newNode = copyHead();
-		int indexOf = 0;
-		if (fromIndex < 0)
+		int currentIndex = 0, fineTune = 0;
+
+		if (newNode == null || fromIndex < 0)
 			return -1;
+
 		if (fromIndex < newNode.getValue() && newNode.getData() == ch)
 			return fromIndex;
-		while (newNode != null && indexOf + newNode.getValue() < fromIndex) {
-			indexOf += newNode.getValue();
-			newNode = newNode.getNext();
-		}// while
-		if (newNode == null)
-			return -1;
-		while (newNode != null && newNode.getData() != ch) {
-			indexOf += newNode.getValue();
-			newNode = newNode.getNext();
-		}// while
-		if (newNode == null)
-			return -1;
-		return indexOf;
 
+		while (newNode != null) {
+			if (currentIndex + newNode.getValue() > fromIndex
+					&& newNode.getData() == ch) {
+				while (currentIndex + fineTune < fromIndex)
+					fineTune++;
+
+				return currentIndex + fineTune;
+			}// if
+			currentIndex += newNode.getValue();
+			newNode = newNode.getNext();
+		}// while !=null
+		return -1;
 	}// indexOf
 
 	/**
@@ -197,6 +209,7 @@ public class StringList {
 	 *            The StringList to compare this StringList against.
 	 * @return true if this String represents the same sequence of characters as
 	 *         the specified StringList, false otherwise.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public boolean equals(StringList str) {
 		CharNode origin = copyHead();
@@ -214,6 +227,7 @@ public class StringList {
 	 *         StringList, '-1' if this StringList is lexicographically less
 	 *         than the given StringList argument, and '1' if this string is
 	 *         lexicographically greater than the given StringList argument.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public int compareTo(StringList str) {
 		CharNode origin = copyHead();
@@ -246,6 +260,7 @@ public class StringList {
 	 * @param i
 	 *            The beginning index, inclusive.
 	 * @return The StringList with the specified substring.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public StringList substring(int i) {
 		StringList subList = new StringList(this);
@@ -276,6 +291,7 @@ public class StringList {
 	 * 
 	 * @return The length of the sequence of characters represented by this
 	 *         StringList.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public int length() {
 		int counter = 0;
@@ -291,6 +307,8 @@ public class StringList {
 	 * Returns the specified StringList's String representation with a quotation
 	 * mark both at the beginning and the end of this StringList's String
 	 * representation.
+	 * 
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	public String toString() {
 		String temp = "\"";
@@ -315,6 +333,7 @@ public class StringList {
 	 * Creates a pointer to this StringList's root CharNode.
 	 * 
 	 * @return A pointer to this StringList's root CharNode.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	private CharNode copyHead() {
 		if (_head == null)
@@ -328,6 +347,7 @@ public class StringList {
 	 * @param other
 	 *            The given StringList.
 	 * @return A pointer to the given StringList's root CharNode.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	private CharNode copyHead(StringList other) {
 		if (other._head == null)
@@ -340,6 +360,7 @@ public class StringList {
 	 * Returns the last CharNode in this StringList.
 	 * 
 	 * @return The last CharNode in this StringList.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	private CharNode getLastNode() {
 		CharNode temp;
@@ -358,6 +379,7 @@ public class StringList {
 	 *            The index point from which to clip.
 	 * @return The StringList's String representation excluding characters from
 	 *         point 'i'.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	private StringList clipFromIndex(int i) {
 		int counter = 0, fineTune = 0;
@@ -394,6 +416,7 @@ public class StringList {
 	 * @return if both 'origin' and 'target' are null, or if each of both
 	 *         StringList's CharNodes contain the same 'data' and 'value', false
 	 *         otherwise.
+	 * @Complexity Time:O(n) , Space: O(1)
 	 * @see {@link #equals(StringList)}
 	 */
 	private boolean equals(CharNode origin, CharNode target) {
@@ -418,7 +441,7 @@ public class StringList {
 	 *            The CharNode to compare to.
 	 * @return true if 'origin' and 'target' are equal in 'data' and in 'value',
 	 *         false otherwise.
-	 * 
+	 * @Complexity Time:O(n) , Space: O(1)
 	 */
 	private boolean compareNodes(CharNode origin, CharNode target) {
 		if (origin == null && target == null)
@@ -430,22 +453,4 @@ public class StringList {
 				.getValue());
 	}// compareNodes
 
-	public static void main(String[] args) {
-		StringList list = new StringList("aaabbbcccdddeeefffggg");
-		System.out.println(list.substring(0, 0));
-		System.out.println(list.substring(0, 1));
-		System.out.println(list.substring(0, 2));
-		System.out.println(list.substring(0, 3));
-		System.out.println(list.substring(0, 4));
-		System.out.println(list.substring(0, 5));
-		System.out.println(list.substring(0, 6));
-		System.out.println(list.substring(0, 7));
-		System.out.println(list.substring(0, 8));
-		System.out.println(list.substring(0, 9));
-		System.out.println(list.substring(0, 10));
-		System.out.println(list.substring(0, 11));
-		System.out.println(list.substring(0, 12));
-		System.out.println(list.substring(0, 13));
-
-	}
-}
+}// Class
