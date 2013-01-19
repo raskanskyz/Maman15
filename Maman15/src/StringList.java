@@ -248,26 +248,27 @@ public class StringList {
 	 * @return The StringList with the specified substring.
 	 */
 	public StringList substring(int i) {
-		int counter = 0;
 		StringList subList = new StringList(this);
-		while (subList._head != null && counter + subList._head.getValue() <= i) {
+		int counter = 0, fineTune = 0;
+		if (i == 0)
+			return subList;
+		while (subList._head != null) {
+			if (counter + subList._head.getValue() > i) {
+				while (counter + fineTune < i) {
+					fineTune++;
+				}// while fineTuning
+				subList._head.setValue(subList._head.getValue() - fineTune);
+				return subList;
+			}// if
 			counter += subList._head.getValue();
 			subList._head = subList._head.getNext();
 		}// while
-		if (subList._head == null)
-			return subList;
-		for (int j = 1; counter + j <= i; j++)
-			subList._head.setValue(j);
 		return subList;
+
 	}// subString
 
-	/* INCOMPLETE */public StringList substring(int i, int j) {
-
-		StringList subList = new StringList(this);
-		if (subList._head == null)
-			return null;
-		return subList.substring(i).clipFromIndex(j);
-
+	public StringList substring(int i, int j) {
+		return this.clipFromIndex(j).substring(i);
 	}// subString
 
 	/**
@@ -350,23 +351,6 @@ public class StringList {
 	}// getLastNode
 
 	/**
-	 * 
-	 */
-	/* INCOMPLETE */private void clipLastNode() {
-		if (_head == null)
-			return;
-		if (_head.getNext() == null)
-			_head = null;
-		CharNode newNode = copyHead();
-		CharNode prev = null;
-		while (newNode.getNext() != null) {
-			prev = newNode;
-			newNode = newNode.getNext();
-		}// while
-		prev.setNext(null);
-	}// clipLastNode
-
-	/**
 	 * Clips this StringList's String representation from the given index point,
 	 * inclusive.
 	 * 
@@ -376,26 +360,28 @@ public class StringList {
 	 *         point 'i'.
 	 */
 	private StringList clipFromIndex(int i) {
-		int counter = 0;
+		int counter = 0, fineTune = 0;
 		StringList subList = new StringList(this);
-		CharNode temp = copyHead(subList);
+		CharNode temp = subList._head;
 		if (i == 0) {
-			temp = null;
+			subList._head = null;
 			return subList;
 		}// if
-		while (temp != null && counter + temp.getValue() < i) {
-			counter += temp.getValue();
-			if (temp.getNext() == null)
+		while (temp != null) {
+			if (counter + temp.getValue() >= i) {
+				while (fineTune < i - counter)
+					fineTune++;
+
+				temp.setValue(fineTune);
 				temp.setNext(null);
+				return subList;
+			}
+			counter += temp.getValue();
 			temp = temp.getNext();
 		}
-		if (temp == null)
-			return subList;
-		if (counter < i)
-			temp.setValue(i - counter);
 
-		temp.setNext(null);
 		return subList;
+
 	}// clipFromIndex
 
 	/**
@@ -445,23 +431,21 @@ public class StringList {
 	}// compareNodes
 
 	public static void main(String[] args) {
-		StringList hello = new StringList("Happy");
-		StringList world = new StringList("def");
-		System.out.println(hello.toString());
-		System.out.println(world.toString());
-		System.out.println(hello.concat(world).toString());
-		System.out.println("hello is still: " + hello.toString());
-		System.out.println("World is still: " + world.toString());
-		System.out.println("*******************");
-		System.out.println(hello.equals(world));
-		System.out.println(hello.length());
-		System.out.println(hello.compareTo(world));
-		System.out.println(hello.substring(2) + " is a subString of "
-				+ hello.toString());
+		StringList list = new StringList("aaabbbcccdddeeefffggg");
+		System.out.println(list.substring(0, 0));
+		System.out.println(list.substring(0, 1));
+		System.out.println(list.substring(0, 2));
+		System.out.println(list.substring(0, 3));
+		System.out.println(list.substring(0, 4));
+		System.out.println(list.substring(0, 5));
+		System.out.println(list.substring(0, 6));
+		System.out.println(list.substring(0, 7));
+		System.out.println(list.substring(0, 8));
+		System.out.println(list.substring(0, 9));
+		System.out.println(list.substring(0, 10));
+		System.out.println(list.substring(0, 11));
+		System.out.println(list.substring(0, 12));
+		System.out.println(list.substring(0, 13));
 
-		// System.out.println(hello.substring(0, 5));
-
-		StringList myList = new StringList("aaaaaaabccccdddddd");
-		System.out.println(myList.substring(3, 3));
 	}
 }
